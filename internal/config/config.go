@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	BotToken      string
-	DBPath        string
-	AllowedUserID int64
+	BotToken        string
+	DBPath          string
+	AllowedUserID   int64
+	ForcedThreshold int
 }
 
 func Load() (Config, error) {
@@ -32,9 +33,20 @@ func Load() (Config, error) {
 		return Config{}, fmt.Errorf("ALLOWED_USER_ID must be a positive integer")
 	}
 
+	forcedThreshold := 8
+	forcedThresholdRaw := os.Getenv("FORCED_THRESHOLD")
+	if forcedThresholdRaw != "" {
+		parsed, err := strconv.Atoi(forcedThresholdRaw)
+		if err != nil || parsed <= 0 {
+			return Config{}, fmt.Errorf("FORCED_THRESHOLD must be a positive integer")
+		}
+		forcedThreshold = parsed
+	}
+
 	return Config{
-		BotToken:      token,
-		DBPath:        dbPath,
-		AllowedUserID: allowedUserID,
+		BotToken:        token,
+		DBPath:          dbPath,
+		AllowedUserID:   allowedUserID,
+		ForcedThreshold: forcedThreshold,
 	}, nil
 }
