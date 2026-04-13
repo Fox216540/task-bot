@@ -28,7 +28,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("telegram init error: %v", err)
 	}
-	svc := bot.NewService(repo, api, cfg.AllowedUserID)
+	svc := bot.NewService(repo, api, cfg.AllowedUserID, cfg.ForcedThreshold)
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
