@@ -3,6 +3,7 @@
 BOT_TOKEN ?=
 DB_PATH ?= task_bot.sqlite
 ALLOWED_USER_ID ?=
+FORCED_THRESHOLD ?= 8
 GO_BIN := $(shell if command -v go >/dev/null 2>&1; then command -v go; elif [ -x /usr/local/go/bin/go ]; then echo /usr/local/go/bin/go; fi)
 GOCACHE ?= $(CURDIR)/.cache/go-build
 GOMODCACHE ?= $(CURDIR)/.cache/go-mod
@@ -10,7 +11,7 @@ TEST_PATH ?= ./tests/...
 
 help:
 	@echo "Available targets:"
-	@echo "  make run   - run bot (requires BOT_TOKEN and ALLOWED_USER_ID)"
+	@echo "  make run   - run bot (requires BOT_TOKEN and ALLOWED_USER_ID; optional FORCED_THRESHOLD, default 8)"
 	@echo "  make test  - run tests from TEST_PATH (default: ./tests/...)"
 	@echo "  make deps  - download and tidy dependencies"
 
@@ -37,7 +38,7 @@ run: check-go
 		exit 1; \
 	fi
 	mkdir -p "$(GOCACHE)" "$(GOMODCACHE)"
-	GOCACHE="$(GOCACHE)" GOMODCACHE="$(GOMODCACHE)" BOT_TOKEN="$(BOT_TOKEN)" DB_PATH="$(DB_PATH)" ALLOWED_USER_ID="$(ALLOWED_USER_ID)" "$(GO_BIN)" run ./cmd/task-bot
+	GOCACHE="$(GOCACHE)" GOMODCACHE="$(GOMODCACHE)" BOT_TOKEN="$(BOT_TOKEN)" DB_PATH="$(DB_PATH)" ALLOWED_USER_ID="$(ALLOWED_USER_ID)" FORCED_THRESHOLD="$(FORCED_THRESHOLD)" "$(GO_BIN)" run ./cmd/task-bot
 
 test: check-go
 	mkdir -p "$(GOCACHE)" "$(GOMODCACHE)"
