@@ -51,6 +51,8 @@ func (a *APIClient) SendMessage(ctx context.Context, chatID int64, text string, 
 			rows = append(rows, buttons)
 		}
 		msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(rows...)
+	} else {
+		msg.ReplyMarkup = quickActionsKeyboard()
 	}
 
 	if err := ctx.Err(); err != nil {
@@ -58,6 +60,18 @@ func (a *APIClient) SendMessage(ctx context.Context, chatID int64, text string, 
 	}
 	_, err := a.bot.Send(msg)
 	return err
+}
+
+func quickActionsKeyboard() tgbotapi.ReplyKeyboardMarkup {
+	return tgbotapi.ReplyKeyboardMarkup{
+		Keyboard: [][]tgbotapi.KeyboardButton{
+			{
+				tgbotapi.NewKeyboardButton("/busy now"),
+				tgbotapi.NewKeyboardButton("/unbusy"),
+			},
+		},
+		ResizeKeyboard: true,
+	}
 }
 
 func (a *APIClient) AnswerCallback(ctx context.Context, callbackID string, text string) error {
