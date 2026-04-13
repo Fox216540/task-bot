@@ -1,0 +1,13 @@
+services:
+  task-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: task-bot
+    restart: unless-stopped
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
+      ALLOWED_USER_ID: ${ALLOWED_USER_ID}
+      DB_PATH: /app/data/task_bot.sqlite
+    volumes:
+      - ./task-bot:/app/data
