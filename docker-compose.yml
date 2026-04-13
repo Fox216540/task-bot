@@ -8,6 +8,7 @@ services:
     environment:
       BOT_TOKEN: ${BOT_TOKEN}
       ALLOWED_USER_ID: ${ALLOWED_USER_ID}
+      FORCED_THRESHOLD: ${FORCED_THRESHOLD:-8}
       DB_PATH: /app/data/task_bot.sqlite
     volumes:
       - ./task-bot:/app/data
